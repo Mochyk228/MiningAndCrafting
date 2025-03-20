@@ -1,5 +1,9 @@
 extends CharacterBody2D
 
+signal OnStoneUpdate
+signal OnBambooUpdate
+signal OnPickAxeUpdate
+
 @export var item_dic : Dictionary [String, Vector2i]
 
 @export var move_speed : float = 40.0
@@ -13,10 +17,17 @@ func mining(tile_map : TileMapLayer):
 	var mouse_pos = get_global_mouse_position()
 	var tile_pos = tile_map.local_to_map(mouse_pos)
 	
+	if Inventory.pick_axe > 0:
+		tile_map.set_cell(tile_pos, -1)
+	
 	if tile_map.get_cell_atlas_coords(tile_pos) == item_dic["Bamboo"]:
 		tile_map.set_cell(tile_pos, -1)
+		OnBambooUpdate.emit()
+		Inventory.bamboo += 1
 	elif tile_map.get_cell_atlas_coords(tile_pos) == item_dic["Stone"]:
 		tile_map.set_cell(tile_pos, -1)
+		OnStoneUpdate.emit()
+		Inventory.stone += 1
 
 func _physics_process(delta):
 	if Input.is_action_just_pressed("mouse_left_click"):
@@ -37,6 +48,9 @@ func _physics_process(delta):
 	move_and_slide()
 
 func _process(delta):
+	if Inventory.pick_axe > 0:
+		OnPickAxeUpdate.emit()
+	
 	if velocity.length() > 0:
 		if velocity.x > 0:
 			sprite.flip_h = false

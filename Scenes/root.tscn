@@ -1,8 +1,11 @@
-[gd_scene load_steps=6 format=4 uid="uid://707vq0t6x377"]
+[gd_scene load_steps=10 format=4 uid="uid://707vq0t6x377"]
 
 [ext_resource type="Texture2D" uid="uid://dbin40btu2ebu" path="res://Art/background.png" id="1_i04dx"]
 [ext_resource type="Texture2D" uid="uid://curhrmgo0c20j" path="res://Art/tile_set.png" id="2_8pvmw"]
 [ext_resource type="PackedScene" uid="uid://b6jxl460emqv6" path="res://Scenes/player.tscn" id="3_vnucn"]
+[ext_resource type="Script" uid="uid://qvu3pa8fpiq" path="res://Scripts/furance.gd" id="4_4g5cr"]
+[ext_resource type="Texture2D" uid="uid://ces1tiq6kqaui" path="res://Art/furance.png" id="4_c3mwy"]
+[ext_resource type="Texture2D" uid="uid://bh1op5faon86d" path="res://Art/slot.png" id="6_ckhy6"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vnucn"]
 texture = ExtResource("2_8pvmw")
@@ -21,6 +24,9 @@ texture_region_size = Vector2i(8, 8)
 tile_size = Vector2i(8, 8)
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_vnucn")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4g5cr"]
+size = Vector2(10, 12)
 
 [node name="Root" type="Node2D"]
 
@@ -41,3 +47,72 @@ tile_set = SubResource("TileSet_i04dx")
 [node name="Player" parent="." node_paths=PackedStringArray("tile_map_layer", "tile_map_layer_2") instance=ExtResource("3_vnucn")]
 tile_map_layer = NodePath("../TileMaps/TileMapLayer")
 tile_map_layer_2 = NodePath("../TileMaps/TileMapLayer2")
+
+[node name="Furance" type="Area2D" parent="."]
+position = Vector2(82, 83)
+script = ExtResource("4_4g5cr")
+
+[node name="Sprite" type="Sprite2D" parent="Furance"]
+texture = ExtResource("4_c3mwy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furance"]
+shape = SubResource("RectangleShape2D_4g5cr")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="Furance"]
+visible = false
+
+[node name="Control" type="Control" parent="Furance/CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FunaranceMenu" type="TextureRect" parent="Furance/CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_ckhy6")
+stretch_mode = 3
+
+[node name="Item1" type="TextureRect" parent="Furance/CanvasLayer/Control/FunaranceMenu"]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 18.0
+offset_right = 58.0
+offset_bottom = 58.0
+scale = Vector2(0.03, 0.03)
+texture = ExtResource("6_ckhy6")
+
+[node name="Item2" type="TextureRect" parent="Furance/CanvasLayer/Control/FunaranceMenu"]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 20.0
+offset_right = 58.0
+offset_bottom = 60.0
+scale = Vector2(0.03, 0.03)
+texture = ExtResource("6_ckhy6")
+
+[node name="FinishItem" type="TextureRect" parent="Furance/CanvasLayer/Control/FunaranceMenu"]
+layout_mode = 0
+offset_left = 21.0
+offset_top = 19.0
+offset_right = 61.0
+offset_bottom = 59.0
+scale = Vector2(0.03, 0.03)
+texture = ExtResource("6_ckhy6")
+
+[connection signal="mouse_entered" from="Furance" to="Furance" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Furance" to="Furance" method="_on_mouse_exited"]
+[connection signal="mouse_entered" from="Furance/CanvasLayer/Control/FunaranceMenu" to="Furance" method="_on_funarance_menu_mouse_entered"]
+[connection signal="mouse_exited" from="Furance/CanvasLayer/Control/FunaranceMenu" to="Furance" method="_on_funarance_menu_mouse_exited"]
