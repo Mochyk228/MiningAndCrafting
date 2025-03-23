@@ -4,8 +4,11 @@ var is_mouse_hovering : bool
 var is_mouse_outside : bool
 var is_slot1_ready : bool
 var is_slot2_ready : bool
+var is_craft_ready : bool
 
 @onready var canvas_layer: CanvasLayer = $CanvasLayer
+@export var player: CharacterBody2D
+
 const BAMBOO_SLOT = preload("res://Art/bamboo_slot.png")
 const STONE_SLOT = preload("res://Art/stone_slot.png")
 const SLOT = preload("res://Art/slot.png")
@@ -43,11 +46,13 @@ func _process(delta):
 		$CanvasLayer/Control/FunaranceMenu/Item2.texture = SLOT
 		is_slot2_ready = false
 		
-	if canvas_layer.visible == true and is_slot1_ready and is_slot2_ready:
-		Inventory.stone -= 1
-		Inventory.bamboo -= 1
-		Inventory.pick_axe += 1
-		$CanvasLayer/Control/FunaranceMenu/FinishItem.texture = PICK_AXE
-# if inventory stone is more than 1 change texture and remove stone from inventory
-# When all is ready furge a pick axe and add it to inventory 
-# activate to be able to brake all the blocks
+	if canvas_layer.visible == true and is_slot1_ready and is_slot2_ready and is_craft_ready:
+			Inventory.remove_stone()
+			Inventory.remove_bamboo()
+			if not Inventory.is_inventory_full:
+				Inventory.pick_axe += 1
+				$CanvasLayer/Control/FunaranceMenu/FinishItem.texture = PICK_AXE
+				player.OnPickAxeUpdate.emit()
+				is_craft_ready = false
+	elif canvas_layer.visible == false:
+		is_craft_ready = true

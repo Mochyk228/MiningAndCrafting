@@ -21,6 +21,7 @@ item_dic = Dictionary[String, Vector2i]({
 texture = ExtResource("2_6t5aa")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -0.52)
 shape = SubResource("CapsuleShape2D_vnucn")
 
 [node name="Camera2D" type="Camera2D" parent="."]
